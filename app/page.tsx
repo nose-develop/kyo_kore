@@ -207,6 +207,24 @@ export default function Home() {
     setResult(null);
   }
 
+  function handleUpdateTaskPriority(taskId: string, nextPriority: number) {
+    const normalizedPriority = Math.min(10, Math.max(1, nextPriority));
+
+    setTasks((currentTasks) =>
+      currentTasks.map((task) =>
+        task.id === taskId
+          ? {
+              ...task,
+              priority: normalizedPriority,
+            }
+          : task,
+      ),
+    );
+    setResult(null);
+    setErrorMessage("");
+    setRerollCount(0);
+  }
+
   function validateRun() {
     if (tasks.length === 0) {
       return "まずは今日やることを入力してください。";
@@ -389,18 +407,75 @@ export default function Home() {
                   {tasks.map((task, index) => (
                     <li
                       key={task.id}
-                      className="flex items-center gap-3 rounded-2xl border border-[#eadfcb] bg-[#fffdf7] p-3"
+                      className={`gap-3 rounded-2xl border border-[#eadfcb] bg-[#fffdf7] p-3 ${
+                        mode === "weighted"
+                          ? "grid sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center"
+                          : "flex items-center"
+                      }`}
                     >
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#24211d] text-sm font-black text-white">
-                        {index + 1}
-                      </span>
-                      <span className="min-w-0 flex-1 break-words font-bold">
-                        {task.title}
-                      </span>
-                      {mode === "weighted" ? (
-                        <span className="rounded-full bg-[#ffe197] px-3 py-1 text-sm font-black text-[#6b4b00]">
-                          重要度 {task.priority ?? 5}
+                      <div className="flex min-w-0 items-center gap-3">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#24211d] text-sm font-black text-white">
+                          {index + 1}
                         </span>
+                        <span className="min-w-0 flex-1 break-words font-bold">
+                          {task.title}
+                        </span>
+                      </div>
+                      {mode === "weighted" ? (
+                        <div className="flex items-center justify-between gap-2 rounded-2xl bg-[#fff4c7] p-2 sm:justify-center">
+                          <span className="text-sm font-black text-[#6b4b00]">
+                            重要度
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleUpdateTaskPriority(
+                                  task.id,
+                                  Number(task.priority ?? 5) - 1,
+                                )
+                              }
+                              aria-label={`${task.title}の重要度を下げる`}
+                              className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-[#24211d] bg-white text-lg font-black shadow-[0_2px_0_#24211d] transition hover:translate-y-0.5 hover:shadow-none"
+                            >
+                              -
+                            </button>
+                            <input
+                              value={task.priority ?? 5}
+                              onChange={(event) => {
+                                const nextPriority = Number(
+                                  event.target.value,
+                                );
+
+                                if (Number.isInteger(nextPriority)) {
+                                  handleUpdateTaskPriority(
+                                    task.id,
+                                    nextPriority,
+                                  );
+                                }
+                              }}
+                              type="number"
+                              min="1"
+                              max="10"
+                              inputMode="numeric"
+                              aria-label={`${task.title}の重要度`}
+                              className="h-9 w-16 rounded-xl border-2 border-[#ded3bd] bg-white text-center text-base font-black outline-none transition focus:border-[#24211d]"
+                            />
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleUpdateTaskPriority(
+                                  task.id,
+                                  Number(task.priority ?? 5) + 1,
+                                )
+                              }
+                              aria-label={`${task.title}の重要度を上げる`}
+                              className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-[#24211d] bg-white text-lg font-black shadow-[0_2px_0_#24211d] transition hover:translate-y-0.5 hover:shadow-none"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
                       ) : null}
                       <button
                         type="button"
