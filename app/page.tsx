@@ -410,7 +410,7 @@ export default function Home() {
                       className={`gap-3 rounded-2xl border border-[#eadfcb] bg-[#fffdf7] p-3 ${
                         mode === "weighted"
                           ? "grid sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center"
-                          : "flex items-center"
+                          : "grid grid-cols-[minmax(0,1fr)_auto] items-center"
                       }`}
                     >
                       <div className="flex min-w-0 items-center gap-3">
@@ -481,7 +481,7 @@ export default function Home() {
                         type="button"
                         onClick={() => handleDeleteTask(task.id)}
                         aria-label={`${task.title}を削除`}
-                        className="min-h-10 rounded-xl border border-[#ded3bd] px-3 text-sm font-bold text-[#625c52] transition hover:border-[#b03324] hover:text-[#b03324]"
+                        className="min-h-10 justify-self-end rounded-xl border border-[#ded3bd] px-3 text-sm font-bold text-[#625c52] transition hover:border-[#b03324] hover:text-[#b03324]"
                       >
                         削除
                       </button>
