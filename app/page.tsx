@@ -312,8 +312,12 @@ export default function Home() {
             今日これだけメーカー
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-[#625c52] sm:text-lg">
-            今日やることが多すぎる日に、まず1つだけ決めます。
-            ちゃんと優先順位を決めなくても大丈夫。
+            <span className="block">
+              今日やることが多すぎる日に、まず1つだけ決めます。
+            </span>
+            <span className="block">
+              ちゃんと優先順位を決めなくても大丈夫。
+            </span>
           </p>
         </section>
 
@@ -537,7 +541,10 @@ export default function Home() {
                     タスクを2つ以上入れると決められます。
                   </p>
                   <p className="mt-3 text-sm leading-6 text-[#625c52]">
-                    迷っていても大丈夫。ボタンを押したら、今日の一歩をここに出します。
+                    <span className="block">迷っていても大丈夫。</span>
+                    <span className="block">
+                      ボタンを押したら、今日の一歩をここに出します。
+                    </span>
                   </p>
                 </div>
               )}
@@ -606,14 +613,22 @@ function ResultView({
         </p>
       </div>
       <p className="font-bold text-[#625c52]">
-        {result.mode === "weighted"
-          ? "重要度を重みとして抽選した結果、このタスクが選ばれました。"
-          : "他はできなくてもOKです。まずはこれだけやりましょう。"}
+        {result.mode === "weighted" ? (
+          "重要度を重みとして抽選した結果、このタスクが選ばれました。"
+        ) : (
+          <>
+            <span className="block">他はできなくてもOKです。</span>
+            <span className="block">まずはこれだけやりましょう。</span>
+          </>
+        )}
       </p>
       <p className="mt-3 font-black text-[#c3523b]">{result.message}</p>
       {rerollCount > 1 ? (
         <p className="mt-4 rounded-2xl bg-[#fff7db] px-4 py-3 text-sm font-bold text-[#6b4b00]">
-          選び直してもOKですが、迷いすぎ注意です。3回以内に決めましょう。
+          <span className="block">
+            選び直してもOKですが、迷いすぎ注意です。
+          </span>
+          <span className="block">3回以内に決めましょう。</span>
         </p>
       ) : null}
       <ResultActions mode={mode} onReroll={onReroll} onReset={onReset} />
